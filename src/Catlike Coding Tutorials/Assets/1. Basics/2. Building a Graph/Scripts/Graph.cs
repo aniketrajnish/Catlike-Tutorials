@@ -13,7 +13,7 @@ public class Graph : MonoBehaviour
         float step = 2f / resolution;
 
         var position = Vector3.zero;
-        var scale = Vector3.one * step;
+        var scale = Vector3.one * step * 10f;
 
         for (int i  = 0; i < points.Length; i++)
         {
