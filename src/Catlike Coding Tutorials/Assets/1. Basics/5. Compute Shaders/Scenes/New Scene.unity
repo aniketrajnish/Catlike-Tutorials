@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 1583728311}
   - component: {fileID: 1583728312}
   m_Layer: 0
-  m_Name: Complex Graph
+  m_Name: GPU Graph
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,16 +164,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1583728309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 839c7359f69216842bd824bb7b053b37, type: 3}
+  m_Script: {fileID: 11500000, guid: 36f67c8c2f1c77141986f1c9d7937e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointPrefab: {fileID: 2166086846000308173, guid: 32a83d82c1e303143b3fb22f507d6b18, type: 3}
-  resolution: 50
+  resolution: 10
   function: 0
   transitionFunction: 0
   transitionMode: 0
   functionDuration: 1
   transitionDuration: 1
+  computeShader: {fileID: 7200000, guid: d64b547a6385b974a94e06fac9e4112c, type: 3}
+  material: {fileID: 2100000, guid: 19fd54d334c346841ab3e1b54dcbd721, type: 2}
+  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1684789464
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,7 +262,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684789464}
   m_LocalRotation: {x: 0.7071069, y: -0.000000059604638, z: -0.000000059604638, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 2.0845742, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
