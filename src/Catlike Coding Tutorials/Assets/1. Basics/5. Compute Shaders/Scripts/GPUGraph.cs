@@ -4,7 +4,9 @@ public class GPUGraph : MonoBehaviour
 {
     public enum TransitionMode { Cycle, Random }
 
-    [SerializeField, Range(10,1000)]
+    const int maxResolution = 1000;
+
+    [SerializeField, Range(10, maxResolution)]
     int resolution = 10;
 
     [SerializeField]
@@ -33,11 +35,12 @@ public class GPUGraph : MonoBehaviour
         positionsId = Shader.PropertyToID("_Positions"),
         resolutionsId = Shader.PropertyToID("_Resolution"),
         stepId = Shader.PropertyToID("_Step"),
-        timeId = Shader.PropertyToID("_Time");
+        timeId = Shader.PropertyToID("_Time"),
+        transitionProgressId = Shader.PropertyToID("_TransitionProgress");
 
     private void OnEnable()
     {
-        positionsBuffer = new ComputeBuffer(resolution * resolution, 3*4);
+        positionsBuffer = new ComputeBuffer(maxResolution * maxResolution, 3*4);
     }
     private void OnDisable()
     {
@@ -75,19 +78,29 @@ public class GPUGraph : MonoBehaviour
     void UpdateFunctionOnGPU()
     {
         float step = 2f / resolution;
+
+        var kernelIndex = (int)function + (int)(transitioning ? transitionFunction : function) * FunctionLibrary.FunctionCount;
+
         int groups = Mathf.CeilToInt(resolution / 8f);
 
         computeShader.SetInt(resolutionsId, resolution);
         computeShader.SetFloat(stepId, step);
         computeShader.SetFloat(timeId, Time.time);
+        if (transitioning)
+        {
+            computeShader.SetFloat(
+                transitionProgressId,
+                Mathf.SmoothStep(0f, 1f, duration / transitionDuration)
+            );
+        }
 
-        computeShader.SetBuffer(0, positionsId, positionsBuffer);
-        computeShader.Dispatch(0,groups, groups, 1);
+        computeShader.SetBuffer(kernelIndex, positionsId, positionsBuffer);
+        computeShader.Dispatch(kernelIndex, groups, groups, 1);
 
         material.SetBuffer(positionsId, positionsBuffer);
         material.SetFloat(stepId, step);
 
         var bounds = new Bounds(Vector3.zero, Vector3.one * (2f + 2f/resolution));
-        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, positionsBuffer.count);
+        Graphics.DrawMeshInstancedProcedural(mesh, 0, material, bounds, resolution * resolution);
     }
 }
